@@ -24,6 +24,30 @@ class ApplicationTest extends NsTest {
         );
     }
 
+    @Test
+    void 예외_테스트_주어진_구분자가_아니지만_입력_받은_경우() {
+        assertSimpleTest(() ->
+                assertThatThrownBy(() -> runException("1,2*3,4@5"))
+                        .isInstanceOf(IllegalArgumentException.class)
+        );
+    }
+
+    @Test
+    void 예외_테스트_구분자가_쌍따옴표인_경우() {
+        assertSimpleTest(() -> {
+            run("//\"\\n1\"2\"3");
+            assertThat(output()).contains("결과 : 6");
+        });
+    }
+
+    @Test
+    void 예외_테스트_구분자가_숫자인_경우() {
+        assertSimpleTest(() -> {
+            run("//1\\n11213");
+            assertThat(output()).contains("결과 : 6");
+        });
+    }
+
     @Override
     public void runMain() {
         Application.main(new String[]{});
